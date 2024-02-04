@@ -31,18 +31,25 @@ def check_dir(filename: str):
             data.write("")
 
 
-def copy_data(source_file, dest_file):
-    """Копирования данных из одного файла в другой"""
+
+def copy_text_line_to_file(input_file, output_file):
+    """Копирования выбранной строки из одного файла в другой"""
     try:
-        with open(source_file, 'r', encoding='utf-8') as file_in:
-            with open(dest_file, 'w', encoding='utf-8') as file_out:
-                for line in file_in:
-                    file_out.write(line)
-        print('Текст успешно скопирован в новый файл:', dest_file)
+        with open(input_file, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
     except FileNotFoundError:
-        print('Ошибка: файл не найден!')
-    except Exception as e:
-        print('Произошла ошибка при копировании текста:', e)
+        print(f"Файл '{input_file}' не найден. Проверьте правильность имени файла.")
+        return
+
+    line_number = int(input("Введите номер строки для копирования: ")) - 1
+
+    if line_number < 0 or line_number >= len(lines):
+        print(f"В указанном файле нет строки с номером {line_number + 1}.")
+        return
+
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(lines[line_number])
+
 
 
 INFO_STRING = """
@@ -74,8 +81,8 @@ while True:
         print(search_user(search, DATASOURCE))
         # exit()
     elif mode == 4:
-        dest_file = input('Введите имя и расширение нового файла: ')
-        copy_data(DATASOURCE, dest_file)
+        output_file = input('Введите имя и расширение нового файла: ')
+        copy_text_line_to_file(DATASOURCE, output_file)
         # exit()
     elif mode == 5:
         print('exit')
